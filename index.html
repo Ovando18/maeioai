@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moai Out/2026 – Set/2027</title>
+<style>
+  :root{
+    --bg:#f4f6f3; --card:#fff; --ink:#1d2b24; --muted:#6b7a72; --line:#e2e8e3;
+    --brand:#1f7a5a; --brand-d:#165a43; --accent:#e8a33d; --bad:#c0392b; --ok:#1f7a5a;
+    --shadow:0 1px 3px rgba(20,40,30,.08),0 4px 14px rgba(20,40,30,.05);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+  header{background:linear-gradient(135deg,var(--brand-d),var(--brand));color:#fff;padding:20px 16px}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 14px}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  h1{margin:0;font-size:1.35rem}
+  header small{opacity:.85}
+  button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:9px 16px;font-weight:600}
+  .btn{background:var(--brand);color:#fff}
+  .btn:hover{background:var(--brand-d)}
+  .btn.sec{background:#e9efe9;color:var(--ink)}
+  .btn.warn{background:var(--accent);color:#2b1d00}
+  .btn.danger{background:#f6dcd8;color:var(--bad)}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+  header .btn{background:rgba(255,255,255,.18);color:#fff}
+  header .btn:hover{background:rgba(255,255,255,.3)}
+  main{padding:18px 0 40px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+  .kpi{background:var(--card);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+  .kpi .l{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .kpi .v{font-size:1.65rem;font-weight:700;margin-top:2px}
+  .kpi .s{font-size:.82rem;color:var(--muted)}
+  .kpi.hl{background:var(--brand);color:#fff}
+  .kpi.hl .l,.kpi.hl .s{color:#d5efe4}
+  section.card{background:var(--card);border-radius:14px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px}
+  h2{margin:0 0 12px;font-size:1.05rem}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;font-size:.92rem}
+  th,td{padding:8px 8px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{font-size:.76rem;text-transform:uppercase;color:var(--muted);letter-spacing:.04em}
+  td.n,th.n{text-align:right}
+  .scroll{overflow-x:auto}
+  tr.futuro td{color:#9aa7a0}
+  tr.proximo td{background:#fff7e6;font-weight:600}
+  .tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.76rem;font-weight:600}
+  .tag.lance{background:#e1f3ea;color:var(--ok)}
+  .tag.sorteio{background:#fdeccb;color:#8a5a00}
+  .tag.organizador{background:#e5e9f7;color:#34408a}
+  .tag.pend{background:#eef0ee;color:var(--muted)}
+  .admin{border:2px solid var(--accent);background:#fffdf7}
+  .admin .row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:10px}
+  label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:3px}
+  input,select{font:inherit;padding:9px 10px;border:1px solid #cdd7cf;border-radius:10px;background:#fff;min-width:150px}
+  .modo{display:flex;gap:8px;margin-bottom:12px}
+  .modo label{display:flex;align-items:center;gap:6px;font-size:.95rem;color:var(--ink);background:#f1f4f1;padding:8px 14px;border-radius:10px;cursor:pointer;margin:0}
+  .modo input{min-width:0}
+  .hint{font-size:.84rem;color:var(--muted);margin:6px 0 0}
+  .msg{padding:9px 12px;border-radius:10px;margin-top:10px;font-size:.9rem}
+  .msg.err{background:#f9e1de;color:var(--bad)}
+  .msg.ok{background:#e1f3ea;color:var(--ok)}
+  .banner{background:#fdeccb;color:#6b4700;padding:9px 14px;font-size:.88rem;text-align:center}
+  .chart svg{width:100%;height:auto;display:block}
+  .legend{display:flex;gap:16px;font-size:.82rem;color:var(--muted);margin-top:6px;flex-wrap:wrap}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .people{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+  .p{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:10px;background:#f6f8f6;font-size:.92rem}
+  .p.done{background:#e8f4ee}
+  dialog{border:0;border-radius:16px;padding:0;box-shadow:0 10px 40px rgba(0,0,0,.3);max-width:92vw}
+  dialog::backdrop{background:rgba(10,25,18,.6)}
+  .draw{padding:34px 44px;text-align:center;min-width:300px}
+  .draw .who{font-size:2rem;font-weight:800;color:var(--brand-d);margin:14px 0;min-height:2.6rem}
+  .draw .who.final{animation:pop .5s}
+  @keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+  footer{text-align:center;color:var(--muted);font-size:.8rem;padding-bottom:30px}
+</style>
+</head>
+<body>
+<div id="banner"></div>
+<header>
+  <div class="wrap">
+    <div>
+      <h1>💰 Moai Out/2026 – Set/2027</h1>
+      <small id="sub"></small>
+    </div>
+    <div id="auth"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="kpis" id="kpis"></div>
+  <div id="adminBox"></div>
+
+  <section class="card">
+    <h2>Mês a mês</h2>
+    <div class="scroll"><table id="tabela"></table></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card"><h2>Evolução dos lances</h2><div class="chart" id="ch1"></div>
+      <div class="legend"><span><i style="background:#1f7a5a"></i>Lance do mês</span><span><i style="background:#e8a33d"></i>Acumulado de lances</span></div></section>
+    <section class="card"><h2>Montante a receber por mês</h2><div class="chart" id="ch2"></div>
+      <div class="legend"><span><i style="background:#1f7a5a"></i>Já pago</span><span><i style="background:#9ccfb8"></i>Próximo (previsto)</span></div></section>
+  </div>
+
+  <section class="card">
+    <h2>Participantes <small style="font-weight:400;color:var(--muted)">· valor que cada cota paga a partir do próximo mês</small></h2>
+    <div class="people" id="people"></div>
+  </section>
+</main>
+<footer>Painel do Moai · visualização livre, edição só com senha do administrador</footer>
+
+<dialog id="dlg"><div class="draw">
+  <div id="dlgTitle" style="color:var(--muted)">🎲 Sorteando...</div>
+  <div class="who" id="dlgWho"></div>
+  <button class="btn" id="dlgOk" style="display:none">OK</button>
+</div></dialog>
+
+<script>
+/* ===================== Estado e cálculos ===================== */
+const API = "/api/moai";
+const MESES = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+const brl = v => (v ?? 0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $ = id => document.getElementById(id);
+
+let estado = null;
+let modoLocal = false;
+let senha = sessionStorage.getItem("moaiSenha") || "";
+let admin = false;
+let tipoLanc = "lance";
+
+const INICIAL = () => ({
+  config:{valorCota:200,lanceMin:40,inicio:"2026-10",totalMeses:12},
+  cotas:["Eliene","Ajurimar","Thiago","Anderson (cota 1)","Anderson (cota 2)","Henrique","Renata","Ilsa","Rosi","Luiz","Solange","Eliane"].map((nome,i)=>({id:i+1,nome})),
+  meses:[{n:1,cotaId:1,tipo:"organizador",lance:0},{n:2,cotaId:2,tipo:"lance",lance:100}]
+});
+
+function rotuloMes(n){ // n = 1..12
+  const [a,m] = estado.config.inicio.split("-").map(Number);
+  const idx = (m-1)+(n-1);
+  return MESES[idx%12]+"/"+(a+Math.floor(idx/12));
+}
+const nomeCota = id => estado.cotas.find(c=>c.id===id)?.nome ?? "?";
+
+function calcular(){
+  const {valorCota,totalMeses} = estado.config;
+  const base = estado.cotas.length*valorCota;
+  const linhas = [];
+  let acum = 0;
+  for(let n=1;n<=totalMeses;n++){
+    const antes = acum;
+    const m = estado.meses.find(x=>x.n===n);
+    linhas.push({n, rotulo:rotuloMes(n), montante:base+antes, acumAntes:antes, m,
+                 acumDepois: acum+(m?m.lance:0)});
+    if(m){ acum+=m.lance; }
+  }
+  return {linhas, base, acumTotal:acum};
+}
+
+/* ===================== API (Netlify) com fallback local ===================== */
+async function carregar(){
+  try{
+    const r = await fetch(API,{cache:"no-store"});
+    if(!r.ok || !(r.headers.get("content-type")||"").includes("json")) throw 0;
+    estado = await r.json(); modoLocal=false;
+  }catch{
+    modoLocal=true;
+    estado = JSON.parse(localStorage.getItem("moaiLocal")||"null") || INICIAL();
+  }
+}
+async function chamar(corpo){
+  if(!modoLocal){
+    const r = await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({senha,...corpo})});
+    const d = await r.json();
+    if(!r.ok) throw new Error(d.erro||"Erro");
+    if(corpo.acao!=="login") estado = d;
+    return d;
+  }
+  // ---- modo local (teste sem servidor) ----
+  if(senha!=="moai2026") throw new Error("Senha incorreta");
+  if(corpo.acao==="login") return {ok:true};
+  const prox = estado.meses.length+1;
+  const usados = new Set(estado.meses.map(m=>m.cotaId));
+  const pend = estado.cotas.filter(c=>!usados.has(c.id));
+  if(corpo.acao==="lancar"){
+    if(prox>estado.config.totalMeses) throw new Error("O moai já terminou.");
+    const lance=Number(corpo.lance), cotaId=Number(corpo.cotaId);
+    if(!pend.some(c=>c.id===cotaId)) throw new Error("Essa cota já foi contemplada.");
+    if(!(lance>=estado.config.lanceMin)) throw new Error("O lance mínimo é R$ "+estado.config.lanceMin+",00.");
+    estado.meses.push({n:prox,cotaId,tipo:"lance",lance});
+  }else if(corpo.acao==="sortear"){
+    if(prox>estado.config.totalMeses) throw new Error("O moai já terminou.");
+    const buf=new Uint32Array(1); crypto.getRandomValues(buf);
+    const s=pend[buf[0]%pend.length];
+    estado.meses.push({n:prox,cotaId:s.id,tipo:"sorteio",lance:estado.config.lanceMin});
+  }else if(corpo.acao==="desfazer"){
+    if(estado.meses.length<=1) throw new Error("Nada para desfazer.");
+    estado.meses.pop();
+  }
+  localStorage.setItem("moaiLocal",JSON.stringify(estado));
+  return estado;
+}
+
+/* ===================== Renderização ===================== */
+function render(){
+  const {linhas,base,acumTotal} = calcular();
+  const feitos = estado.meses.length, total = estado.config.totalMeses;
+  const proxLinha = linhas.find(l=>!l.m);
+  const pendentes = estado.cotas.length - feitos;
+
+  $("sub").textContent = `${estado.cotas.length} cotas de ${brl(estado.config.valorCota)} · lance mínimo ${brl(estado.config.lanceMin)} · ${rotuloMes(1)} a ${rotuloMes(total)}`;
+  $("banner").innerHTML = modoLocal ? `<div class="banner">⚠️ Modo de teste local (sem servidor): os dados ficam só neste navegador. Senha de teste: <b>moai2026</b>. No Netlify os dados são compartilhados.</div>` : "";
+
+  $("auth").innerHTML = admin
+    ? `<span style="margin-right:10px">🔓 Admin</span><button class="btn" id="btnSair">Sair</button>`
+    : `<button class="btn" id="btnEntrar">🔒 Admin</button>`;
+  if(admin) $("btnSair").onclick = ()=>{admin=false;senha="";sessionStorage.removeItem("moaiSenha");render();};
+  else $("btnEntrar").onclick = entrar;
+
+  $("kpis").innerHTML = `
+    <div class="kpi hl"><div class="l">${proxLinha?`Montante de ${proxLinha.rotulo}`:"Moai encerrado"}</div>
+      <div class="v">${proxLinha?brl(proxLinha.montante):"—"}</div>
+      <div class="s">${proxLinha?`${brl(base)} em cotas + ${brl(proxLinha.acumAntes)} de lances`:"Todas as cotas contempladas"}</div></div>
+    <div class="kpi"><div class="l">Acumulado de lances</div><div class="v">${brl(acumTotal)}</div><div class="s">soma dos lances já dados</div></div>
+    <div class="kpi"><div class="l">Meses realizados</div><div class="v">${feitos} / ${total}</div><div class="s">${proxLinha?`próximo: ${proxLinha.rotulo}`:"concluído"}</div></div>
+    <div class="kpi"><div class="l">Falta contemplar</div><div class="v">${pendentes}</div><div class="s">cota(s)</div></div>`;
+
+  renderAdmin(proxLinha, pendentes);
+
+  $("tabela").innerHTML = `<thead><tr><th>#</th><th>Mês</th><th>Contemplado</th><th>Forma</th><th class="n">Lance</th><th class="n">Acumulado lances</th><th class="n">Montante do mês</th></tr></thead><tbody>` +
+    linhas.map(l=>{
+      const m=l.m, prox = proxLinha && l.n===proxLinha.n;
+      return `<tr class="${m?"":prox?"proximo":"futuro"}"><td>${l.n}</td><td>${l.rotulo}</td>
+        <td>${m?esc(nomeCota(m.cotaId)):prox?"<i>a definir</i>":"—"}</td>
+        <td>${m?`<span class="tag ${m.tipo}">${{lance:"Lance",sorteio:"Sorteio",organizador:"Organizadora"}[m.tipo]}</span>`:""}</td>
+        <td class="n">${m?(m.lance?brl(m.lance):"—"):""}</td>
+        <td class="n">${m?brl(l.acumDepois):""}</td>
+        <td class="n">${brl(l.montante)}</td></tr>`;
+    }).join("")+`</tbody>`;
+
+  $("people").innerHTML = estado.cotas.map(c=>{
+    const m = estado.meses.find(x=>x.cotaId===c.id);
+    const paga = estado.config.valorCota + (m?m.lance:0);
+    return `<div class="p ${m?"done":""}"><span>${esc(c.nome)}<br><small style="color:var(--muted)">paga ${brl(paga)}/mês${m&&m.lance?` (cota + lance)`:""}</small></span>${m?`<span class="tag ${m.tipo}">${rotuloMes(m.n)}</span>`:`<span class="tag pend">aguardando</span>`}</div>`;
+  }).join("");
+
+  // gráficos
+  const labels = linhas.map(l=>l.rotulo.split("/")[0]);
+  const lances = linhas.map(l=>l.m?l.m.lance:null);
+  const acum = linhas.map(l=>l.m?l.acumDepois:null);
+  $("ch1").innerHTML = grafico(labels,lances,acum,null);
+  const mont = linhas.map(l=>l.m?l.montante:null);
+  $("ch2").innerHTML = grafico(labels,mont,null,proxLinha?proxLinha.n-1:null,proxLinha?proxLinha.montante:null);
+}
+
+function renderAdmin(proxLinha,pendentes){
+  const box=$("adminBox");
+  if(!admin){box.innerHTML="";return;}
+  if(!proxLinha){
+    box.innerHTML=`<section class="card admin"><h2>Administração</h2><p>O moai terminou. 🎉</p><button class="btn danger" id="bDesf">Desfazer último lançamento</button></section>`;
+    $("bDesf").onclick=desfazer; return;
+  }
+  const usados=new Set(estado.meses.map(m=>m.cotaId));
+  const opts=estado.cotas.filter(c=>!usados.has(c.id)).map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join("");
+  box.innerHTML=`<section class="card admin">
+    <h2>Lançar ${proxLinha.rotulo} — montante ${brl(proxLinha.montante)}</h2>
+    <div class="modo">
+      <label><input type="radio" name="tp" value="lance" ${tipoLanc==="lance"?"checked":""}> Lance</label>
+      <label><input type="radio" name="tp" value="sorteio" ${tipoLanc==="sorteio"?"checked":""}> Sorteio (sem lance)</label>
+    </div>
+    <div id="fLance" style="${tipoLanc==="lance"?"":"display:none"}">
+      <div class="row">
+        <div><label>Contemplado</label><select id="selCota">${opts}</select></div>
+        <div><label>Valor do lance (mín. ${brl(estado.config.lanceMin)})</label><input id="inLance" type="number" min="${estado.config.lanceMin}" step="1" placeholder="${estado.config.lanceMin}"></div>
+        <button class="btn" id="bSalvar">Salvar lançamento</button>
+      </div>
+      <p class="hint">O contemplado passa a pagar o valor da cota + o lance todo mês, do mês seguinte até o fim. O montante dos próximos meses é recalculado.</p>
+    </div>
+    <div id="fSorteio" style="${tipoLanc==="sorteio"?"":"display:none"}">
+      <div class="row"><button class="btn warn" id="bSortear">🎲 Realizar sorteio</button></div>
+      <p class="hint">Sorteia entre as ${pendentes} cota(s) ainda não contemplada(s). O sorteado passa a pagar o lance mínimo de ${brl(estado.config.lanceMin)} todo mês, do mês seguinte até o fim.</p>
+    </div>
+    <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+    <div class="row"><button class="btn danger" id="bDesf">Desfazer último lançamento</button></div>
+    <div id="admMsg"></div></section>`;
+  document.querySelectorAll('input[name="tp"]').forEach(r=>r.onchange=()=>{tipoLanc=r.value;renderAdmin(proxLinha,pendentes);});
+  $("bSalvar")&&($("bSalvar").onclick=salvar);
+  $("bSortear")&&($("bSortear").onclick=sortear);
+  $("bDesf").onclick=desfazer;
+}
+
+/* ===================== Gráfico SVG ===================== */
+function grafico(labels,barras,linha,destaqueIdx,previsto){
+  const W=640,H=280,L=56,R=12,T=14,B=30, w=W-L-R, h=H-T-B, n=labels.length;
+  const vals=[...barras,...(linha||[]),previsto].filter(v=>v!=null);
+  let max=Math.max(...vals,1); const step=niceStep(max/4); max=Math.ceil(max/step)*step;
+  const y=v=>T+h-(v/max)*h, bw=w/n*0.6, x=i=>L+w/n*(i+.5);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img">`;
+  for(let v=0;v<=max+1e-9;v+=step){
+    s+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="#e2e8e3"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end" font-size="10" fill="#6b7a72">${v>=1000?(v/1000).toLocaleString("pt-BR")+"k":v}</text>`;
+  }
+  barras.forEach((v,i)=>{
+    if(v!=null){
+      s+=`<rect x="${x(i)-bw/2}" y="${y(v)}" width="${bw}" height="${Math.max(h-(y(v)-T),0)}" rx="3" fill="#1f7a5a"><title>${labels[i]}: ${brl(v)}</title></rect>`;
+      if(v>0) s+=`<text x="${x(i)}" y="${y(v)-4}" text-anchor="middle" font-size="9" fill="#1d2b24">${v.toLocaleString("pt-BR")}</text>`;
+    }
+  });
+  if(previsto!=null && destaqueIdx!=null){
+    const i=destaqueIdx;
+    s+=`<rect x="${x(i)-bw/2}" y="${y(previsto)}" width="${bw}" height="${h-(y(previsto)-T)}" rx="3" fill="#9ccfb8"><title>${labels[i]} (previsto): ${brl(previsto)}</title></rect>
+        <text x="${x(i)}" y="${y(previsto)-4}" text-anchor="middle" font-size="9" fill="#1d2b24">${previsto.toLocaleString("pt-BR")}</text>`;
+  }
+  if(linha){
+    const pts=linha.map((v,i)=>v==null?null:[x(i),y(v)]).filter(Boolean);
+    if(pts.length){
+      s+=`<polyline fill="none" stroke="#e8a33d" stroke-width="2.5" points="${pts.map(p=>p.join(",")).join(" ")}"/>`;
+      linha.forEach((v,i)=>{if(v!=null)s+=`<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="#e8a33d"><title>${labels[i]} acumulado: ${brl(v)}</title></circle>`;});
+    }
+  }
+  labels.forEach((t,i)=>{s+=`<text x="${x(i)}" y="${H-10}" text-anchor="middle" font-size="10" fill="#6b7a72">${t}</text>`;});
+  return s+"</svg>";
+}
+function niceStep(raw){const p=Math.pow(10,Math.floor(Math.log10(raw||1)));const f=raw/p;return (f<=1?1:f<=2?2:f<=5?5:10)*p;}
+
+/* ===================== Ações ===================== */
+function aviso(txt,ok){const e=$("admMsg");if(e)e.innerHTML=`<div class="msg ${ok?"ok":"err"}">${esc(txt)}</div>`;}
+
+async function entrar(){
+  const s=prompt("Senha do administrador:");
+  if(s===null) return;
+  senha=s;
+  try{await chamar({acao:"login"});admin=true;sessionStorage.setItem("moaiSenha",senha);render();}
+  catch(e){senha="";alert(e.message);}
+}
+async function acao(corpo,okMsg){
+  try{await chamar(corpo);render();aviso(okMsg,true);}
+  catch(e){aviso(e.message,false);}
+}
+async function salvar(){
+  const cotaId=$("selCota").value, lance=$("inLance").value;
+  if(!cotaId) return aviso("Não há cotas pendentes.",false);
+  if(lance==="") return aviso("Informe o valor do lance (ou use a opção Sorteio).",false);
+  const nome=$("selCota").selectedOptions[0].text;
+  if(!confirm(`Lançar ${nome} com lance de ${brl(Number(lance))}?`)) return;
+  await acao({acao:"lancar",cotaId,lance},"Lançamento salvo.");
+}
+async function desfazer(){
+  if(!confirm("Desfazer o último lançamento?")) return;
+  await acao({acao:"desfazer"},"Último lançamento desfeito.");
+}
+async function sortear(){
+  if(!confirm("Realizar o sorteio entre as cotas ainda não contempladas?")) return;
+  const dlg=$("dlg"), who=$("dlgWho"), ok=$("dlgOk");
+  const nomes=estado.cotas.filter(c=>!estado.meses.some(m=>m.cotaId===c.id)).map(c=>c.nome);
+  $("dlgTitle").textContent="🎲 Sorteando..."; who.className="who"; ok.style.display="none"; dlg.showModal();
+  const t=setInterval(()=>{who.textContent=nomes[Math.floor(Math.random()*nomes.length)];},90);
+  const espera=new Promise(r=>setTimeout(r,2000));
+  try{
+    await Promise.all([chamar({acao:"sortear"}),espera]);
+    clearInterval(t);
+    const m=estado.meses[estado.meses.length-1];
+    $("dlgTitle").textContent=`Sorteado de ${rotuloMes(m.n)}:`;
+    who.textContent=nomeCota(m.cotaId); who.className="who final";
+    ok.style.display="inline-block"; ok.onclick=()=>{dlg.close();render();};
+    dlg.onclose=render;
+  }catch(e){clearInterval(t);dlg.close();aviso(e.message,false);}
+}
+
+/* ===================== Início ===================== */
+(async()=>{
+  await carregar();
+  if(senha){ try{await chamar({acao:"login"});admin=true;}catch{senha="";sessionStorage.removeItem("moaiSenha");} }
+  render();
+})();
+</script>
+</body>
+</html>
